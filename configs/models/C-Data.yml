@@ -1,0 +1,33 @@
+models:
+  - name: C-Data FD1204SN-R1
+    ports: 0
+    inputs:
+      - snmp
+#      - telnet
+    oids:
+      - ./oids/c-data/pon.yml
+    detect: {description: Ethernet-PON,  objid: ^.1.3.6.1.4.1.17409$ }
+    extra:
+      max_ont_by_port: 64
+      olt_type: EPON
+    modules:
+      fdb: \SwitcherCore\Modules\Snmp\Fdb\DefaultParser
+      link_info: \SwitcherCore\Modules\Snmp\Link\CDataParser
+      counters: \SwitcherCore\Modules\Snmp\Counters\DefaultParser
+      system: \SwitcherCore\Modules\Snmp\System\DefaultParser
+      vlans: \SwitcherCore\Modules\Snmp\Vlan\DlinkVlanParser
+      cable_diag: \SwitcherCore\Modules\Snmp\CableDiag\DlinkParser
+      errors: \SwitcherCore\Modules\Snmp\Errors\DefaultParser
+      rmon: \SwitcherCore\Modules\Snmp\Rmon\DefaultParser
+      pvid: \SwitcherCore\Modules\Snmp\Vlan\PvidParser
+      clear_counters: \SwitcherCore\Modules\Telnet\Dlink\ClearCounters
+      save_config: \SwitcherCore\Modules\Telnet\Dlink\SaveConfig
+      reboot: \SwitcherCore\Modules\Telnet\Dlink\Reboot
+      vlans_by_port: \SwitcherCore\Modules\Snmp\Vlan\VlanByPorts
+      ctrl_port_state: \SwitcherCore\Modules\Telnet\Dlink\StatePortControl
+      ctrl_port_speed: \SwitcherCore\Modules\Telnet\Dlink\SpeedPortControl
+      ctrl_port_descr: \SwitcherCore\Modules\Telnet\Dlink\DescriptionPortControl
+      ctrl_vlan_state: \SwitcherCore\Modules\Telnet\Dlink\VlanStateControl
+      ctrl_vlan_port: \SwitcherCore\Modules\Telnet\Dlink\VlanPortControl
+
+

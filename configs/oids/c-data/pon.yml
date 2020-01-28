@@ -1,0 +1,67 @@
+- {name: eoc.system.ipAddr, oid: .1.3.6.1.4.1.17409.2.3.1.1.2 }
+- {name: eoc.system.subnetMask, oid: .1.3.6.1.4.1.17409.2.3.1.1.3 }
+- {name: eoc.system.gateway, oid: .1.3.6.1.4.1.17409.2.3.1.1.4 }
+- {name: eoc.system.mgntVlan, oid: .1.3.6.1.4.1.17409.2.3.1.1.5 }
+- {name: eoc.system.macAddr, oid: .1.3.6.1.4.1.17409.2.3.1.1.6 }
+- {name: eoc.system.vendor, oid: .1.3.6.1.4.1.17409.2.3.1.1.12 }
+- {name: eoc.system.sn, oid: .1.3.6.1.4.1.17409.2.3.1.1.13 }
+- {name: eoc.system.saveConfig, oid: .1.3.6.1.4.1.17409.2.3.1.1.14, values: {1: save} }
+- {name: eoc.system.saveConfigStatus, oid: .1.3.6.1.4.1.17409.2.3.1.1.15, values: {0: fail, 1: success, 2: inProccess}}
+- {name: eoc.system.model, oid: .1.3.6.1.4.1.17409.2.3.1.2.1.1.3 }
+- {name: eoc.system.uptime, oid: .1.3.6.1.4.1.17409.2.3.1.2.1.1.5 }
+
+
+- {name: eoc.power.operationStatus, oid: .1.3.6.1.4.1.17409.2.3.1.4.1.1.3, values: {1: up, 2: down, 3: testing}}
+# The redundancy status of the power card
+# active(1) - The power card is working on redundanct active/
+# Standby mode and the current role is active.
+# stanby(2) - The power card is working on redundanct active/
+# Standby mode and the current role is standby.
+# standalone(3) - The power card is not working on redundanct mode
+# and the current role is standalone.
+# loadShareing(4) - The power card is working on redundanct loadsharing
+# mode.
+- {name: eoc.power.redundancyStatus, oid: .1.3.6.1.4.1.17409.2.3.1.4.1.1.8, values: {1: active, 2: standby, 3: standalone, 4: shareing}}
+
+#Информация о PON портах OLT (фрейма/слота)
+- {name: if.pon.operStatus, oid: .1.3.6.1.4.1.17409.2.3.3.1.1.5, values: {1: up, 2: down, 3: testing}}
+- {name: if.pon.adminStatus, oid: .1.3.6.1.4.1.17409.2.3.3.1.1.6, values: {1: enable, 2: disable}}
+- {name: if.pon.maxOnuSupport, oid: .1.3.6.1.4.1.17409.2.3.3.1.1.7}
+- {name: if.pon.upOnuNum, oid: .1.3.6.1.4.1.17409.2.3.3.1.1.8}
+- {name: if.pon.name, oid: .1.3.6.1.4.1.17409.2.3.3.1.1.21}
+
+#PON Port optical modules power/signal info
+#Voltage
+- {name: if.pon.opVcc, oid: .1.3.6.1.4.1.17409.2.3.3.5.1.4}
+- {name: if.pon.opBias, oid: .1.3.6.1.4.1.17409.2.3.3.5.1.5}
+#PON module powers
+- {name: if.pon.opTxPower, oid: .1.3.6.1.4.1.17409.2.3.3.5.1.6}
+
+#Detected power on OLT from ONU
+- {name: if.pon.opRxPowerOfOnu, oid: .1.3.6.1.4.1.17409.2.3.3.6.1.2}
+
+#ONU information
+- {name: if.onu.name, oid: .1.3.6.1.4.1.17409.2.3.4.1.1.2}
+- {name: if.onu.macAddr, oid: .1.3.6.1.4.1.17409.2.3.4.1.1.7}
+- {name: if.onu.operStatus, oid: .1.3.6.1.4.1.17409.2.3.4.1.1.8, values: {1: up, 2: down, 3: testing}}
+- {name: if.onu.adminStatus, oid: .1.3.6.1.4.1.17409.2.3.4.1.1.9, values: {1: up, 2: down, 3: testing}}
+- {name: if.onu.adminStatus, oid: .1.3.6.1.4.1.17409.2.3.4.1.1.9, values: {1: up, 2: down, 3: testing}}
+- {name: if.onu.distance, oid: .1.3.6.1.4.1.17409.2.3.4.1.1.15}
+- {name: if.onu.reset, oid: .1.3.6.1.4.1.17409.2.3.4.1.1.17, values: {1: reset}}
+# The number of seconds, since the time when the ONU is registered
+- {name: if.onu.sinceLastRegister, oid: .1.3.6.1.4.1.17409.2.3.4.1.1.18}
+- {name: if.onu.vendorId, oid: .1.3.6.1.4.1.17409.2.3.4.1.1.25}
+- {name: if.onu.modelId, oid: .1.3.6.1.4.1.17409.2.3.4.1.1.26}
+- {name: if.onu.hardwareId, oid: .1.3.6.1.4.1.17409.2.3.4.1.1.27}
+- {name: if.onu.serial, oid: .1.3.6.1.4.1.17409.2.3.4.1.1.28}
+
+#Optical info on ONU
+- {name: if.onu.opRxPower, oid: .1.3.6.1.4.1.17409.2.3.4.2.1.4}
+- {name: if.onu.opTxPower, oid: .1.3.6.1.4.1.17409.2.3.4.2.1.5}
+- {name: if.onu.opBias, oid: .1.3.6.1.4.1.17409.2.3.4.2.1.6}
+- {name: if.onu.opVoltage, oid: .1.3.6.1.4.1.17409.2.3.4.2.1.7}
+- {name: if.onu.opTemp, oid: .1.3.6.1.4.1.17409.2.3.4.2.1.8}
+
+
+
+

@@ -5,11 +5,12 @@ namespace SwitcherCore\Modules\Snmp\Link;
 
 use SnmpWrapper\Oid;
 use SwitcherCore\Modules\AbstractModule;
+use SwitcherCore\Modules\AbstractModuleCData;
 use SwitcherCore\Modules\Helper;
 
 ;
 
-class DefaultParser extends AbstractModule
+class LinkInfoParser extends AbstractModuleCData
 {
     private $indexesPort = [];
     protected function formate() {
@@ -18,12 +19,11 @@ class DefaultParser extends AbstractModule
           $snmp_last_change = !$this->response['if.LastChange']->error() ? $this->response['if.LastChange']->fetchAll() : [];
           $snmp_oper_status = !$this->response['if.OperStatus']->error() ? $this->response['if.OperStatus']->fetchAll() : [];
           $snmp_admin_status = !$this->response['if.AdminStatus']->error() ? $this->response['if.AdminStatus']->fetchAll() : [];
-            $snmp_duplex = !$this->response['if.StatsDuplexStatus']->error() ? $this->response['if.StatsDuplexStatus']->fetchAll() : [];
           $descr = !$this->response['if.Alias']->error() ? $this->response['if.Alias']->fetchAll() : [];
+          $ports = !$this->response['if.Descr']->error() ? $this->response['if.Descr']->fetchAll() : [];
 
           $indexes = [];
           foreach ($this->getIndexes() as $index=>$port) {
-
               $indexes[$index]['name'] = $port;
               $indexes[$index]['medium_type'] = null;
               $indexes[$index]['description'] = null;
@@ -36,18 +36,14 @@ class DefaultParser extends AbstractModule
               $indexes[$index]['extra'] = [];
           }
 
+          foreach ($ports as $index) {
+              $indexes[Helper::getIndexByOid($index->getOid())]['name'] =  $index->getValue();
+          }
           foreach ($snmp_high_speed as $index) {
               $indexes[Helper::getIndexByOid($index->getOid())]['nway_status'] =  $index->getValue();
           }
           foreach ($descr as $index) {
               $indexes[Helper::getIndexByOid($index->getOid())]['description'] =  $index->getValue();
-          }
-          foreach ($snmp_duplex as $index) {
-                if($index->getParsedValue() == 'Down') {
-                    $indexes[Helper::getIndexByOid($index->getOid())]['nway_status'] = $index->getParsedValue();
-                } else {
-                    $indexes[Helper::getIndexByOid($index->getOid())]['nway_status'] .= "-" . $index->getParsedValue();
-                }
           }
 
           foreach ($snmp_oper_status as $index) {
@@ -111,7 +107,7 @@ class DefaultParser extends AbstractModule
             $this->obj->oidCollector->getOidByName('if.LastChange')->getOid(),
             $this->obj->oidCollector->getOidByName('if.OperStatus')->getOid(),
             $this->obj->oidCollector->getOidByName('if.AdminStatus')->getOid(),
-            $this->obj->oidCollector->getOidByName('if.StatsDuplexStatus')->getOid(),
+            $this->obj->oidCollector->getOidByName('if.Descr')->getOid(),
             $this->obj->oidCollector->getOidByName('if.Alias')->getOid(),
         ];
 

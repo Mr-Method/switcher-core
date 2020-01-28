@@ -15,7 +15,6 @@ class DlinkParser extends AbstractModule
           $nway_status = $this->getResponseByName('dlink.PortInfoNwayStatus');
           $link_state = $this->getResponseByName('dlink.PortCtrlPortAdminState');
           $nway_state = $this->getResponseByName('dlink.PortCtrlPortNwayState');
-          $addr_learning = $this->getResponseByName('dlink.PortCtrlAddressLearning');
           $description = $this->getResponseByName('if.Alias');
           $medium_type = $this->getResponseByName('dlink.PortInfoMediumType');
           $types = $this->getResponseByName('if.Type');
@@ -41,9 +40,6 @@ class DlinkParser extends AbstractModule
           if($description->error()) {
               throw new \Exception($description->error());
           }
-          if($addr_learning->error()) {
-              throw new \Exception($addr_learning->error());
-          }
 
           $indexMediumType = [];
           foreach ($medium_type->fetchAll() as $d) {
@@ -54,16 +50,14 @@ class DlinkParser extends AbstractModule
           foreach ($link_status->fetchAll() as $d) {
               $port = Helper::getIndexByOid($d->getOid(),1);
               $type = $indexMediumType[Helper::getIndexByOid($d->getOid())];
-              $response["{$port}-{$type}"]['port'] = $port;
+              $response["{$port}-{$type}"]['name'] = $port;
               $response["{$port}-{$type}"]['medium_type'] = $type;
               $response["{$port}-{$type}"]['type'] = null;
               $response["{$port}-{$type}"]['last_change'] = null;
-              $response["{$port}-{$type}"]['connector_present'] = null;
               $response["{$port}-{$type}"]['oper_status'] = $d->getParsedValue();
               $response["{$port}-{$type}"]['description'] = "";
               $response["{$port}-{$type}"]['admin_state'] = "";
               $response["{$port}-{$type}"]['nway_status'] = "";
-              $response["{$port}-{$type}"]['address_learning'] = "";
           }
 
         foreach ($nway_state->fetchAll() as $d) {
@@ -84,11 +78,6 @@ class DlinkParser extends AbstractModule
               $port = Helper::getIndexByOid($d->getOid(),1);
               $type = $indexMediumType[Helper::getIndexByOid($d->getOid())];
               $response["{$port}-{$type}"]['nway_status'] =  $d->getParsedValue();
-          }
-          foreach ($addr_learning->fetchAll() as $d) {
-              $port = Helper::getIndexByOid($d->getOid(),1);
-              $type = $indexMediumType[Helper::getIndexByOid($d->getOid())];
-              $response["{$port}-{$type}"]['address_learning'] =  $d->getParsedValue();
           }
 
         foreach ($description->fetchAll() as $d) {
@@ -136,7 +125,6 @@ class DlinkParser extends AbstractModule
             \SnmpWrapper\Oid::init($this->obj->oidCollector->getOidByName('dlink.PortInfoNwayStatus')->getOid()) ,
             \SnmpWrapper\Oid::init($this->obj->oidCollector->getOidByName('dlink.PortCtrlPortAdminState')->getOid()) ,
             \SnmpWrapper\Oid::init($this->obj->oidCollector->getOidByName('dlink.PortCtrlPortNwayState')->getOid()) ,
-            \SnmpWrapper\Oid::init($this->obj->oidCollector->getOidByName('dlink.PortCtrlAddressLearning')->getOid()) ,
             \SnmpWrapper\Oid::init($this->obj->oidCollector->getOidByName('if.Alias')->getOid()) ,
             \SnmpWrapper\Oid::init($this->obj->oidCollector->getOidByName('if.Type')->getOid(), true) ,
         ];

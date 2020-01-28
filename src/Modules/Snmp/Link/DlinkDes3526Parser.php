@@ -50,16 +50,14 @@ class DlinkDes3526Parser extends DlinkParser
           foreach ($link_status->fetchAll() as $d) {
               $port = Helper::getIndexByOid($d->getOid(),1);
               $type = $indexMediumType[Helper::getIndexByOid($d->getOid())];
-              $response["{$port}-{$type}"]['port'] = $port;
+              $response["{$port}-{$type}"]['name'] = $port;
               $response["{$port}-{$type}"]['medium_type'] = $type;
               $response["{$port}-{$type}"]['type'] = null;
               $response["{$port}-{$type}"]['last_change'] = null;
-              $response["{$port}-{$type}"]['connector_present'] = null;
               $response["{$port}-{$type}"]['oper_status'] = $d->getParsedValue();
               $response["{$port}-{$type}"]['description'] = "";
               $response["{$port}-{$type}"]['admin_state'] = "";
               $response["{$port}-{$type}"]['nway_status'] = "";
-              $response["{$port}-{$type}"]['address_learning'] = null;
           }
 
         foreach ($nway_state->fetchAll() as $d) {

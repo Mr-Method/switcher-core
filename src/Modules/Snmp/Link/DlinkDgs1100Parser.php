@@ -41,16 +41,14 @@ class DlinkDgs1100Parser extends AbstractModule
               if($d->getParsedValue() != 'Down') {
                   $status = 'Up';
               }
-              $response["{$port}-{$type}"]['port'] = $port;
+              $response["{$port}-{$type}"]['name'] = $port;
               $response["{$port}-{$type}"]['medium_type'] = $type;
               $response["{$port}-{$type}"]['type'] = 'GE';
               $response["{$port}-{$type}"]['last_change'] = null;
-              $response["{$port}-{$type}"]['connector_present'] = null;
               $response["{$port}-{$type}"]['oper_status'] = $status;
               $response["{$port}-{$type}"]['description'] = null;
               $response["{$port}-{$type}"]['admin_state'] = null;
               $response["{$port}-{$type}"]['nway_status'] = $d->getParsedValue();
-              $response["{$port}-{$type}"]['address_learning'] = null;
           }
 
         foreach ($nway_state->fetchAll() as $d) {

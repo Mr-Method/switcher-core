@@ -1,0 +1,44 @@
+If port < 100000 - stack/slot not supported.
+
+Indexes stat for all devices (OLT/Switches/Routers)
+TypeID    FrameId(StackId)  SlotId   PortNum
+ 1                       1        1        03
+(1)                   (0-9)   (0-99)    (1-99)
+
+Types:
+ 1 - without type or GE ports
+ 2 - XGE ports (example, for C-Data)
+ 3 - EPON ports
+ 4 - GEPON ports
+
+
+Example port index:
+	Frame - 1 
+	Slot - 2
+	Port - 24 
+Display = 1/2/24
+Delim = 1/1/02/24
+Index = 110224
+
+	Frame - 0
+	Slot - 0
+	Port - 1 
+Display = 0/0/1
+Delim = 1/0/00/01
+Index = 100001 
+
+
+
+ONU calculation with parent port 
+ParentPort(7 octets)    OnuNum      UniPort
+ 1000001                     4            1
+(1000001-1999999)        (1-999)       (0-9)
+Result of ONU index 
+Display - pon0/0/1:4-1
+Delim = 3/0/00/01:04-1
+Index - 3000010041
+        3000000000
+
+
+
+If port > 199999 then Work with ONU else work with port(ONT)

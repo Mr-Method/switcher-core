@@ -195,4 +195,92 @@ class Helper
         }
         return $response;
     }
+    static function portIndexToDisplay($index_port, $show_prefix = true) {
+        if($index_port < 10000) {
+            return $index_port;
+        }
+        $spl = str_split($index_port);
+        $stack = (int) join(array_slice($spl, 1, 1));
+        $slot = (int) join(array_slice($spl, 2, 2));
+        $port = (int) join(array_slice($spl, 4, 2));
+        $type_name = '';
+        if($show_prefix) {
+            switch ($spl[0]) {
+                case '1':
+                    $type_name = '';
+                    break;
+                case '2':
+                    $type_name = 'xge';
+                    break;
+                case '3':
+                    $type_name = 'pon';
+                    break;
+                case '4':
+                    $type_name = 'gpon';
+                    break;
+            }
+        }
+        $found = false;
+        $onu = 0;
+        $uni = 0;
+        if($index_port <= 9999999) {
+        } elseif ($index_port <= 999999999) {
+            $onu = (int) join(array_slice($spl, 6, 3));
+            $found = true;
+        } elseif ($index_port > 1000000000 && $index_port < 9000000000) {
+            $onu = (int) join(array_slice($spl, 6, 3));
+            $uni = (int) join(array_slice($spl, 9, 1));
+            $found = true;
+        }
+        if(!$found) {
+            throw new \InvalidArgumentException("Error parse $index_port, incorrect value");
+        }
+        $resp = "{$type_name}{$stack}/{$slot}/{$port}";
+        if($onu) $resp .= ":{$onu}";
+        if($uni) $resp .= "-{$uni}";
+        return $resp;
+    }
+    static function portDisplayToIndex($display_port) {
+        $type = "1";
+        if(preg_match('/^(ge|xge|pon|epon|gpon)/', $display_port, $match)) {
+            switch ($match[1]) {
+                case 'ge': $type = 1; break;
+                case 'xge': $type = 2; break;
+                case 'pon': $type = 3; break;
+                case 'gpon': $type = 4; break;
+                case 'epon': $type = 3; break;
+            }
+        }
+
+        if(preg_match('/([0-9])\/([0-9]{1,2})\/([0-9]{1,2}):([0-9]{1,3})-([0-9])$/', $display_port, $m)) {
+            return (int) "{$type}" .
+                sprintf("%'.01d", $m[1]) .  //Stack
+                sprintf("%'.02d", $m[2]) .  //Slot
+                sprintf("%'.02d", $m[3]) .  //Port
+                sprintf("%'.03d", $m[4]) .  //Onu
+                sprintf("%'.01d", $m[5])    //Uni
+                ;
+        } elseif (preg_match('/([0-9])\/([0-9]{1,2})\/([0-9]{1,2}):([0-9]{1,3})$/', $display_port, $m)) {
+            return (int) "{$type}" .
+                sprintf("%'.01d", $m[1]) .  //Stack
+                sprintf("%'.02d", $m[2]) .  //Slot
+                sprintf("%'.02d", $m[3]) .  //Port
+                sprintf("%'.03d", $m[4])  //Onu
+                ;
+        } elseif (preg_match('/([0-9])\/([0-9]{1,2})\/([0-9]{1,2})$/', $display_port, $m)) {
+            return (int) "{$type}" .
+                sprintf("%'.01d", $m[1]) .  //Stack
+                sprintf("%'.02d", $m[2]) .  //Slot
+                sprintf("%'.02d", $m[3])  //Port
+                ;
+        } elseif (preg_match('/([0-9])\/([0-9]{1,2})$/', $display_port, $m)) {
+            return (int) "{$type}" .
+                sprintf("%'.02d", $m[1]) .  //Slot
+                sprintf("%'.02d", $m[2])    //Port
+                ;
+        } elseif (preg_match('/^[0-9]{1,5}$/', $display_port)) {
+            return (int) $display_port;
+        }
+        throw new \InvalidArgumentException("Error parse $display_port, unknown format");
+    }
 }
